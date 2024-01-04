@@ -9,5 +9,7 @@ ENV PATH="/venv/bin:$PATH"
 # Install Twine in Python
 RUN python3.11 -m pip install build twine pytest pyarrow
 
+COPY .pypirc ~/.pypirc
+
 # Set virtual environment as entrypoint
 ENTRYPOINT ["/bin/bash"]
