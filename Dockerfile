@@ -1,6 +1,6 @@
 FROM quay.io/centos/centos:stream8
 
-RUN dnf group install "Development Tools"
+RUN dnf -y group install "Development Tools"
 RUN dnf install -y glibc-langpack-en python3.11 java-17-openjdk java-17-openjdk-devel python3-devel
 
 # Create and activate virtual environment
