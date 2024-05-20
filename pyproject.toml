@@ -3,12 +3,12 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "csvtoparquet15"
-version = "0.0.2"
+name = "ndpprep"
+version = "0.0.1"
 authors = [
-    { name="Zaid Waqi", email="zaidwaqi@gmail.com" },
+    { name="Mohd Zaid Waqiyuddin Mohd Zulkifli", email="zaidwaqi@gmail.com" }
 ]
-description = "A command line tool to convert csv to parquet"
+description = "A command line tool to prepare high-quality data in Parquet"
 readme = "README.md"
 license = {text = "MIT"}
 requires-python = ">=3.11"
@@ -23,8 +23,8 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/zaidwaqi/csvtoparquet"
-Issues = "https://github.com/pypa/zaidwaqi/csvtoparquet/issues"
+Homepage = "https://github.com/zaidwaqi/ndpprep"
+Issues = "https://github.com/pypa/zaidwaqi/ndpprep/issues"
 
 [project.scripts]
-csvtoparquet = "csvtoparquet.main:main"
+ndpprep = "ndpprep.main:main"

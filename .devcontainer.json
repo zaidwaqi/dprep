@@ -1,5 +1,5 @@
 {
-    "name": "csvtoparquet",
+    "name": "ndpprep",
     "dockerFile": "Dockerfile",
     // set minimum cpu
      "hostRequirements": {
