@@ -6,7 +6,7 @@ RUN dnf install -y glibc-langpack-en python3.11 java-17-openjdk java-17-openjdk-
 # Create and activate virtual environment
 RUN python3.11 -m venv /venv
 ENV PATH="/venv/bin:$PATH"
-ENV JAVA_HOME="/usr/lib/jvm/java-17-openjdk-amd64"
+ENV JAVA_HOME="/usr/lib/jvm/java-1.17.0-openjdk"
 
 # Install Python packages
 RUN python3.11 -m pip install pytest build twine pyarrow pandas pydoop Click paramiko geopandas
