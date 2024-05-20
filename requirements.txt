@@ -1,0 +1,11 @@
+pyarrow==14.0.2
+twine
+build
+pytest
+pandas
+pydoop
+pyarrow
+geopandas
+paramiko
+io
+Click

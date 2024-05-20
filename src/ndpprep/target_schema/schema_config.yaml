@@ -1,0 +1,376 @@
+schemas:
+  FDP:
+    fields: 
+      - name: BND_ID
+        type: string
+        metadata :  sensitive
+      - name: SEGMENT
+        type: string
+      - name: EXC_ABB
+        type: string
+        metadata :  sensitive
+      - name: FDC_CODE
+        type: string
+        metadata :  sensitive
+      - name: FDP_CODE
+        type: string
+        metadata :  sensitive
+      - name: G3E_FNO
+        type: string
+      - name: G3E_FID
+        type: string
+      - name: FEATURE_ST
+        type: string
+      - name: geometry
+        type: string
+        metadata :  sensitive
+
+  PROJBND:
+    fields: 
+      - name :  EXC_ABB
+        type :  string
+        metadata :  sensitive
+      - name :  PROJ_BND_I
+        type :  string
+      - name :  PROJ_BND_S
+        type :  string
+      - name :  CREATED_BY
+        type :  string
+        metadata :  sensitive
+      - name :  CREATED_DA
+        type :  string
+      - name :  MODIFIED_B
+        type :  string
+      - name :  MODIFIED_D
+        type :  string
+      - name :  PROJ_NO
+        type :  string
+      - name :  geometry
+        type :  string
+        metadata :  sensitive
+
+  CAB:
+    fields: 
+      - name :  SEGMENT
+        type :  string  
+      - name :  EXC_ABB
+        type :  string
+        metadata :  sensitive
+      - name :  CAB_CODE
+        type :  string
+        metadata :  sensitive
+      - name :  BND_TYPE
+        type :  string
+      - name :  G3E_FNO
+        type :  string
+      - name :  G3E_FID
+        type :  string
+        metadata :  sensitive
+      - name :  FEATURE_ST
+        type :  string
+      - name :  geometry
+        type :  string
+        metadata :  sensitive
+
+  DB:
+    fields: 
+      - name :  SEGMENT  
+        type :  string  
+      - name :  EXC_ABB  
+        type :  string  
+        metadata :  sensitive
+      - name :  FDC_CODE  
+        type :  string  
+        metadata :  sensitive
+      - name :  DB_CODE  
+        type :  string  
+        metadata :  sensitive
+      - name :  GC_DB_BND_  
+        type :  float64  
+      - name :  VGC_BND_P_  
+        type :  string  
+      - name :  FEATURE_ST  
+        type :  string  
+      - name :  geometry  
+        type :  string  
+        metadata :  sensitive
+
+  DCBL:
+    fields: 
+      - name :  SEGMENT  
+        type :  string  
+      - name :  EXC_ABB  
+        type :  string  
+        metadata :  sensitive
+      - name :  G3E_FNO  
+        type :  string  
+      - name :  G3E_FID  
+        type :  string  
+        metadata :  sensitive
+      - name :  CABLE_CODE  
+        type :  string  
+      - name :  CABLE_CLAS  
+        type :  string  
+      - name :  FEATURE_ST  
+        type :  string  
+      - name :  geometry  
+        type :  string  
+        metadata :  sensitive
+
+  DDP:
+    fields: 
+      - name :  SEGMENT  
+        type :  string  
+      - name :  EXC_ABB  
+        type :  string  
+        metadata :  sensitive
+      - name :  DDP_NUM  
+        type :  string  
+        metadata :  sensitive
+      - name :  GC_DDP_BND  
+        type :  string  
+      - name :  VGC_BND_P_  
+        type :  string  
+      - name :  FEATURE_ST  
+        type :  string  
+      - name :  geometry  
+        type :  string  
+        metadata :  sensitive
+
+  DP:
+    fields: 
+      - name :  SEGMENT
+        type :  string
+      - name :  EXC_ABB
+        type :  string
+        metadata :  sensitive
+      - name :  CAB_CODE
+        type :  string
+        metadata :  sensitive
+      - name :  RT_CODE
+        type :  string
+        metadata :  sensitive
+      - name :  DP_NUM
+        type :  string
+        metadata :  sensitive
+      - name :  G3E_FNO
+        type :  string
+      - name :  G3E_FID
+        type :  string
+      - name :  FEATURE_ST
+        type :  string
+      - name :  geometry
+        type :  string
+        metadata :  sensitive
+
+  ECBL:
+    fields: 
+      - name :  SEGMENT  
+        type :  string  
+      - name :  EXC_ABB  
+        type :  string  
+        metadata :  sensitive
+      - name :  G3E_FNO  
+        type :  string  
+      - name :  G3E_FID  
+        type :  string  
+        metadata :  sensitive
+      - name :  CABLE_CODE  
+        type :  string  
+      - name :  CABLE_CLAS  
+        type :  string  
+      - name :  FEATURE_ST  
+        type :  string  
+      - name :  geometry  
+        type :  string  
+        metadata :  sensitive
+
+  FCBL:
+    fields: 
+      - name :  SEGMENT  
+        type :  string  
+      - name :  EXC_ABB  
+        type :  string  
+        metadata :  sensitive
+      - name :  G3E_FNO  
+        type :  string  
+      - name :  G3E_FID  
+        type :  string  
+        metadata :  sensitive
+      - name :  CABLE_CODE  
+        type :  string  
+      - name :  CABLE_CLAS  
+        type :  string  
+      - name :  FEATURE_ST  
+        type :  string  
+      - name :  geometry  
+        type :  string  
+        metadata :  sensitive
+
+  FDCBL:
+    fields: 
+      - name :  SEGMENT
+        type :  string  
+      - name :  EXC_ABB
+        type :  string  
+        metadata :  sensitive
+      - name :  G3E_FNO
+        type :  string  
+      - name :  G3E_FID
+        type :  string  
+        metadata :  sensitive
+      - name :  FCABLE_COD
+        type :  string  
+      - name :  FEATURE_ST
+        type :  string  
+      - name :  geometry
+        type :  string  
+        metadata :  sensitive
+
+  DUCTPATH:
+    fields: 
+      - name :  SEGMENT
+        type :  string  
+      - name :  EXC_ABB
+        type :  string  
+        metadata :  sensitive
+      - name :  FEATURE_TY
+        type :  string  
+      - name :  G3E_FNO
+        type :  string  
+      - name :  G3E_FID
+        type :  string  
+        metadata :  sensitive
+      - name :  FEATURE_ST
+        type :  string  
+      - name :  geometry
+        type :  string  
+        metadata :  sensitive
+
+  FDC:
+    fields: 
+      - name :  SEGMENT
+        type :  string  
+      - name :  EXC_ABB
+        type :  string  
+        metadata :  sensitive
+      - name :  FDC_CODE
+        type :  string  
+        metadata :  sensitive
+      - name :  GC_FDC_BND
+        type :  string  
+      - name :  VGC_BND_P_
+        type :  string  
+      - name :  FEATURE_ST
+        type :  string  
+      - name :  geometry
+        type :  string  
+        metadata :  sensitive
+
+  FCBL_JNT:
+    fields: 
+      - name :  REGION
+        type :  string
+      - name :  SEGMENT
+        type :  string
+      - name :  EXC_ABB
+        type :  string
+        metadata :  sensitive
+      - name :  G3E_FNO
+        type :  string
+      - name :  G3E_FID
+        type :  string
+      - name :  CABLE_CODE
+        type :  string
+      - name :  FEATURE_ST
+        type :  string
+      - name :  geometry
+        type :  string  
+        metadata :  sensitive
+
+  MSAN:
+    fields: 
+      - name :  SEGMENT
+        type :   string
+      - name :  EXC_ABB
+        type :  string
+        metadata :  sensitive
+      - name :  RT_CODE
+        type :  string
+        metadata :  sensitive
+      - name :  BND_TYPE
+        type :  string
+      - name :  G3E_FNO
+        type :  string
+      - name :  G3E_FID
+        type :  string
+      - name :  FEATURE_ST
+        type :  string
+      - name :  geometry
+        type :  string  
+        metadata :  sensitive
+
+  RT:
+    fields: 
+      - name :  SEGMENT
+        type :  string
+      - name :  EXC_ABB
+        type :  string
+        metadata :  sensitive
+      - name :  RT_CODE
+        type :  string
+        metadata :  sensitive
+      - name :  BND_TYPE
+        type :  string
+      - name :  G3E_FNO
+        type :  string
+      - name :  G3E_FID
+        type :  string
+      - name :  FEATURE_ST
+        type :  string
+      - name :  geometry
+        type :  string  
+        metadata :  sensitive
+
+  FCBL_TRUNK:
+    fields: 
+      - name :  REGION
+        type :  string
+      - name :  SEGMENT
+        type :  string
+      - name :  EXC_ABB
+        type :  string
+        metadata :  sensitive
+      - name :  G3E_FNO
+        type :  string
+      - name :  G3E_FID
+        type :  string
+      - name :  CABLE_CODE
+        type :  string
+      - name :  FEATURE_ST
+        type :  string
+      - name :  geometry
+        type :  string  
+        metadata :  sensitive
+
+  VDSL2:
+    fields: 
+      - name :  SEGMENT
+        type :  string
+      - name :  EXC_ABB
+        type :  string
+        metadata :  sensitive
+      - name :  RT_CODE
+        type :  string
+      - name :  BND_TYPE
+        type :  string
+      - name :  G3E_FNO
+        type :  string
+      - name :  G3E_FID
+        type :  string
+      - name :  FEATURE_ST
+        type :  string
+      - name :  geometry
+        type :  string  
+        metadata :  sensitive
+

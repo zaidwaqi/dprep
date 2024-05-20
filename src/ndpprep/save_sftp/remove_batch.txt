@@ -1,0 +1,37 @@
+import os
+import paramiko
+import click
+
+
+def remove_old_files(target_user, target_ip, target_path, dbname, dataset_name, extraction_date):
+    try:
+        ssh = paramiko.SSHClient()
+        ssh.load_system_host_keys()
+        ssh.connect(target_ip, username=target_user)
+
+        sftp = ssh.open_sftp()
+
+        # Set the target directory path
+        target_dir = os.path.join(target_path, dbname, dataset_name)
+
+        # List files in the target directory
+        files = sftp.listdir(target_dir)
+
+        # Iterate through files and delete older files
+        for file in files:
+            # Extract extraction date from file name
+            file_extraction_date = file.split('/')[-1]  # Assuming Unix-style paths
+            if file_extraction_date < extraction_date:
+                # Construct the file path and delete
+                file_path = os.path.join(target_dir, file)
+                sftp.remove(file_path)
+                print(f"File '{file_path}' removed successfully.")
+
+        sftp.close()
+        ssh.close()
+
+    except Exception as e:
+        print(f"Error occurred while removing old files from SFTP: {e}")
+
+if __name__ == '__main__':
+    remove_old_files()
