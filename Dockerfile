@@ -7,8 +7,7 @@ RUN python3.11 -m venv /venv
 ENV PATH="/venv/bin:$PATH"
 
 # Install Python packages
-COPY requirements.txt ./requirements.txt
-RUN python3.11 -m pip install --no-cache-dir -r requirements.txt
+RUN python3.11 -m pip install pytest build twine pyarrow pandas pydoop Click paramiko io geopandas
 RUN python3.11 -m pip install -e .
 
 # Set virtual environment as entrypoint
