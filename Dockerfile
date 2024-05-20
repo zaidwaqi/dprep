@@ -9,8 +9,8 @@ ENV PATH="/venv/bin:$PATH"
 # Install Python packages
 RUN echo "export JAVA_HOME=$(dirname $(dirname $(readlink -f $(type -P java))))" > /etc/profile.d/javahome.sh
 
-#python3.11 -m pip install pytest build twine pyarrow pandas pydoop Click paramiko geopandas
-#RUN python3.11 -m pip install -e .
+RUN python3.11 -m pip install pytest build twine pyarrow pandas pydoop Click paramiko geopandas
+RUN python3.11 -m pip install -e .
 
 # Set virtual environment as entrypoint
 ENTRYPOINT ["/bin/bash"]
