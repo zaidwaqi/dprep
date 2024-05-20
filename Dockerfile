@@ -7,7 +7,8 @@ RUN python3.11 -m venv /venv
 ENV PATH="/venv/bin:$PATH"
 
 # Install Python packages
-RUN python3.11 -m pip install -r requirements.txt
+COPY requirements.txt ./requirements.txt
+RUN python3.11 -m pip install --no-cache-dir -r requirements.txt
 RUN python3.11 -m pip install -e .
 
 # Set virtual environment as entrypoint
