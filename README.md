@@ -1,3 +1,3 @@
-# csvtoparquet
+# dprep
 
-This is a project to convert csv to Parquet
+`dprep` is a data prep tool that simplifies use of custom Python data processing within a data pipeline.
