@@ -1,6 +1,6 @@
 FROM quay.io/centos/centos:stream8
 
-RUN dnf install -y glibc-langpack-en python3.11 make java-17-openjdk java-17-openjdk-devel
+RUN dnf install -y glibc-langpack-en python3.11 gcc make java-17-openjdk java-17-openjdk-devel
 
 # Create and activate virtual environment
 RUN python3.11 -m venv /venv
