@@ -6,9 +6,10 @@ RUN dnf install -y glibc-langpack-en python3.11 java-17-openjdk java-17-openjdk-
 # Create and activate virtual environment
 RUN python3.11 -m venv /venv
 ENV PATH="/venv/bin:$PATH"
+ENV JAVA_HOME="/usr/lib/jvm/java-17-openjdk-amd64"
 
 # Install Python packages
-RUN echo "export JAVA_HOME=$(dirname $(dirname $(readlink -f $(type -P java))))" > /etc/profile.d/javahome.sh && python3.11 -m pip install pytest build twine pyarrow pandas pydoop Click paramiko geopandas
+RUN python3.11 -m pip install pytest build twine pyarrow pandas pydoop Click paramiko geopandas
 RUN python3.11 -m pip install -e .
 
 # Set virtual environment as entrypoint
