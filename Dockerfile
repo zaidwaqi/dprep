@@ -9,7 +9,6 @@ ENV PATH="/venv/bin:$PATH"
 
 # Install Python packages
 RUN python3.11 -m pip install pytest build twine pyarrow pandas Click paramiko geopandas
-RUN python3.11 -m pip install -e .
 
 # Set virtual environment as entrypoint
 ENTRYPOINT ["/bin/bash"]
