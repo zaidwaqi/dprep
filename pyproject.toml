@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ndpprep"
-version = "0.0.6"
+version = "0.0.7"
 authors = [
     { name="Mohd Zaid Waqiyuddin Mohd Zulkifli", email="zaidwaqi@gmail.com" }
 ]
@@ -23,7 +23,6 @@ dependencies = [
   "Click",
   "pandas",
   "geopandas",
-  "pydoop",
   "paramiko",
   "io"
 ]
