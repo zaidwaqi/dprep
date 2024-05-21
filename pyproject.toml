@@ -23,8 +23,7 @@ dependencies = [
   "Click",
   "pandas",
   "geopandas",
-  "paramiko",
-  "io"
+  "paramiko"
 ]
 
 [project.urls]
