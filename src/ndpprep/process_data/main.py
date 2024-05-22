@@ -1,7 +1,6 @@
 import pyarrow as pa
 import pyarrow.parquet as pq
 from importlib import import_module
-import pydoop.hdfs as hdfs
 import re
 import os
 import time
@@ -18,6 +17,9 @@ from ndpprep.target_schema.neps import *
 from ndpprep.secret_key.main import read_secret_key
 from ndpprep.encryption.main import encrypt_table
 from ndpprep.save_sftp.main import save_to_sftp
+
+if not os.environ.get("NDPPREP_MODE") == "development":
+    import pydoop.hdfs as hdfs
 
 #granite & nis
 def process_dataset(dbname, dataset_name, extraction_date, secret_path, target_user, target_ip, target_path):
