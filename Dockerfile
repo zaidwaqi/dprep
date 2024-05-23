@@ -9,7 +9,7 @@ ENV PATH="/venv/bin:$PATH"
 ENV NDPPREP_MODE="development"
 
 # Install Python packages
-RUN python3.11 -m pip install pytest build twine pyarrow pandas Click paramiko geopandas rtree
+RUN python3.11 -m pip install pytest build twine pyarrow pandas Click paramiko geopandas rtree pyyaml
 
 # Set virtual environment as entrypoint
 ENTRYPOINT ["/bin/bash"]
