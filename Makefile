@@ -1,2 +1,4 @@
 test:
-	python -m pytest
+	@rm -rf tests/reports/*
+	@pytest -v --tb=line || true
+	
