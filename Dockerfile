@@ -4,7 +4,7 @@ FROM python:3.11-slim
 # Set environment variables for Hadoop
 ENV HADOOP_VERSION=3.3.6
 ENV HADOOP_HOME=/opt/hadoop
-ENV PATH=$PATH:$HADOOP_HOME/bin
+ENV PATH=$PATH:$HADOOP_HOME/bin:/usr/bin/git
 ENV CPATH=/usr/include/tirpc:$CPATH
 
 # Install essential tools and libraries
@@ -17,6 +17,7 @@ RUN apt-get update && \
     dirmngr \
     gcc \
     g++ \
+    git \
     libkrb5-dev \
     libsasl2-dev \
     python3-dev \
@@ -46,8 +47,22 @@ RUN pip install pydoop
 # Verify the installation
 RUN python -c "import pydoop"
 
+# Install virtualenv
+RUN pip install virtualenv
+
+# Create a virtual environment
+RUN virtualenv /opt/venv
+
+# Activate the virtual environment and install dependencies
+COPY requirements.txt /workspace/requirements.txt
+RUN /opt/venv/bin/pip install -r /workspace/requirements.txt
+
 # Set the working directory
 WORKDIR /workspace
+
+# Ensure the virtual environment is activated by default
+ENV VIRTUAL_ENV=/opt/venv
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 # Expose necessary ports (if any)
 EXPOSE 9870 8088 8080 50070 50075 50010 50020 50030
