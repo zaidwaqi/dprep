@@ -1,25 +1,21 @@
 import pyarrow as pa
 import pyarrow.parquet as pq
-from importlib import import_module
 import re
 import os
 import time
-from datetime import datetime
 import pandas as pd
-from io import StringIO 
+from io import StringIO
 
 import sys
 sys.path.append("src")
-from ndpprep.masked.main import masked_uuid, update_mapping
-from ndpprep.target_schema.granite import *
-from ndpprep.target_schema.nis import *
-from ndpprep.target_schema.neps import *
-from ndpprep.secret_key.main import read_secret_key
-from ndpprep.encryption.main import encrypt_table
-from ndpprep.save_sftp.main import save_to_sftp
+from ndpprep.masked import masked_uuid, update_mapping
+from ndpprep.secret_key import read_secret_key
+from ndpprep.encryption import encrypt_table
+from ndpprep.save_sftp import save_to_sftp
 
-if not os.environ.get("NDPPREP_MODE") == "development":
-    import pydoop.hdfs as hdfs
+from ndpprep.target_schema import *
+
+import pydoop.hdfs as hdfs
 
 #granite & nis
 def process_dataset(dbname, dataset_name, extraction_date, secret_path, target_user, target_ip, target_path):
@@ -35,16 +31,16 @@ def process_dataset(dbname, dataset_name, extraction_date, secret_path, target_u
 
         for parquet_file in parquet_files:
             if extraction_date in parquet_file:
-                try: 
+                try:
                     read_start = time.time()
-                    
+
                     with hdfs.open(parquet_file) as f:
                         metadata = pq.read_metadata(f)
                         tbl = pq.read_table(f)
                         schema = metadata.schema
                         tbl = tbl.rename_columns([col.upper() for col in tbl.schema.names])
                         read_duration = time.time() - read_start
-                        
+
                         target_schema_function_name = f"get_target_schema_{dataset_name}"
                         if target_schema_function_name in globals():
                             target_schema_function = globals()[target_schema_function_name]
@@ -59,7 +55,7 @@ def process_dataset(dbname, dataset_name, extraction_date, secret_path, target_u
                         cnt_column_masked = 0
                         masked_columns = []
                         original_columns = []
-                    
+
                         for col_name in tbl.schema.names:
                             if tbl.schema.field(col_name).metadata and tbl.schema.field(col_name).metadata.get(b"req") == b"sensitive":
                                 print(f"Column '{col_name}' metadata:")
@@ -74,7 +70,7 @@ def process_dataset(dbname, dataset_name, extraction_date, secret_path, target_u
                                 modified_columns.append(modified_column)
 
                         update_mapping(original_columns, masked_columns, job_id)
-                            
+
                         tbl = pa.table(modified_columns, schema=tbl.schema)
                         masked_duration = time.time() - masked_start
                         total_row_count = len(tbl)
@@ -83,8 +79,8 @@ def process_dataset(dbname, dataset_name, extraction_date, secret_path, target_u
 
                         output_folder = f'{dbname}/{dataset_name}/extraction_date={extraction_date}'
                         os.makedirs(output_folder, exist_ok=True)
-                        output_file = os.path.join(output_folder, os.path.basename(parquet_file))    
-                                    
+                        output_file = os.path.join(output_folder, os.path.basename(parquet_file))
+
                         # Encrypting data
                         encrypt_start = time.time()
                         encrypt_table(tbl, output_file, secret_key)
@@ -109,15 +105,15 @@ def process_dataset(dbname, dataset_name, extraction_date, secret_path, target_u
                 print(f"File found for extraction date '{extraction_date}' in '{dataset}'")
             else:
                 continue
-            
+
 #raw_neps.db
-def process_neps_dataset(dbname, dataset_name, extraction_date, secret_path, target_user, target_ip, target_path):  
+def process_neps_dataset(dbname, dataset_name, extraction_date, secret_path, target_user, target_ip, target_path):
     if dbname == "raw_neps.db":
         source_db = "nia_reference_dev.db"
     else:
         source_db = dbname
         dbname = "raw_neps.db"
-    
+
     hivepath = "hdfs://nerveprdha/warehouse/tablespace/managed/hive"
     folder = f"{hivepath}/{source_db}/{dataset_name}"
 
@@ -136,24 +132,24 @@ def process_neps_dataset(dbname, dataset_name, extraction_date, secret_path, tar
                 if dataset_name == "raw_neps_fsplicedata_daily_latest":
                     df = pd.read_csv(csv_content, sep='|', header=None, dtype=str)
                 else:
-                    df = pd.read_csv(csv_content, header=None, dtype=str) 
-                
+                    df = pd.read_csv(csv_content, header=None, dtype=str)
+
             read_duration = time.time() - read_start
-            
+
             target_schema_function_name = f"get_parquet_{dataset_name}"
             if target_schema_function_name in globals():
                 target_schema_function = globals()[target_schema_function_name]
                 tbl = target_schema_function(df) # csv -> pq
             else:
                 print(f"Target parquet function '{target_schema_function_name}' not found. Falling back to original schema.")
-            
+
             # masking
             modified_columns = []
             masked_start = time.time()
             cnt_column_masked = 0
             masked_columns = []
             original_columns = []
-                    
+
             for col_name in tbl.schema.names:
                 if tbl.schema.field(col_name).metadata and tbl.schema.field(col_name).metadata.get(b"req") == b"sensitive":
                     print(f"(MASKED) Processing sensitive column '{col_name}' with metadata: {tbl.schema.field(col_name).metadata}")
@@ -168,7 +164,7 @@ def process_neps_dataset(dbname, dataset_name, extraction_date, secret_path, tar
                 modified_columns.append(modified_column)
 
             update_mapping(original_columns, masked_columns, job_id)
-                            
+
             tbl = pa.table(modified_columns, schema=tbl.schema)
             masked_duration = time.time() - masked_start
             total_row_count = len(tbl)

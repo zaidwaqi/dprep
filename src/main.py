@@ -1,6 +1,6 @@
 import sys
 sys.path.append("src")
-from ndpprep.cli.main import cli
+import ndpprep
 
 def main():
-    cli()
+    ndpprep.cli()

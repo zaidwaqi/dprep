@@ -7,6 +7,9 @@ ENV HADOOP_HOME=/opt/hadoop
 ENV PATH=$PATH:$HADOOP_HOME/bin:/usr/bin/git
 ENV CPATH=/usr/include/tirpc:$CPATH
 
+# Set environment for ndpprep_mode
+ENV NDPPREP_MODE="development"
+
 # Install essential tools and libraries
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \

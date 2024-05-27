@@ -19,13 +19,12 @@ warnings.filterwarnings("ignore")
 
 import sys
 sys.path.append("src")
-from ndpprep.masked.main import masked_uuid, update_mapping
-from ndpprep.secret_key.main import read_secret_key
-from ndpprep.encryption.main import encrypt_table
-from ndpprep.save_sftp.main import save_to_sftp
+from ndpprep.masked import masked_uuid, update_mapping
+from ndpprep.encryption import encrypt_table
+from ndpprep.save_sftp import save_to_sftp
 
 """
-# take shpFile.zip from EdgeNode to CDSW 
+# take shpFile.zip from EdgeNode to CDSW
 # unzip file and process to parquet + mask
 # parquet send to SFTP
 # /edge04_mount/vda_data/ingestion/neps/sourcefiles/
@@ -38,7 +37,7 @@ def shp_from_edgenode(remote_user, remote_ip, shp_remote_path, cdsw_direcory):
         print("Files from EdgeNode copied successfully.")
     except subprocess.CalledProcessError as e:
         print(f"Error occurred while copying files: {e}")
-        
+
 def unzip_file(zip_file, extract_to):
     """
     Unzips a ZIP file to the specified directory.
@@ -49,7 +48,7 @@ def unzip_file(zip_file, extract_to):
     """
     # Ensure the extraction directory exists
     os.makedirs(extract_to, exist_ok=True)
-    
+
     with zipfile.ZipFile(zip_file, 'r') as zip_ref:
         zip_ref.extractall(extract_to)
 
@@ -92,7 +91,7 @@ def read_schema(fn):
         config = yaml.safe_load(f)
 
     schemas = {}
-    # Step 2: get the schema base on the element in the filename 
+    # Step 2: get the schema base on the element in the filename
     for schema_name, schema_data in config['schemas'].items():
         if schema_name == fn:
             print("schema_name : ",schema_name)
@@ -133,7 +132,7 @@ def convert_shapefile_to_parquet(fn, sch, pfn,  dbname, dataset_name, private_ke
     read_start = time.time()
     gdf = gpd.read_file(fn)
     read_duration = time.time() - read_start
- 
+
     # Step 2a: Convert the geometry column to Well-Known Text (WKT) format
     gdf['geometry'] = gdf.geometry.apply(lambda x: shapely.wkt.dumps(x))
     # Step 2b: Convert the int64 format column to string format
@@ -155,17 +154,17 @@ def convert_shapefile_to_parquet(fn, sch, pfn,  dbname, dataset_name, private_ke
         #parquet_file_path = 'data/myshapefile.parquet'
         pq.write_table(tbl, pfn)
         print('The Parquet file written into : ',pfn)
-        
+
         # Step 5: Read Parquet into dataframe
         df = pd.read_parquet(pfn)
-        
+
         # Step 6: Masking data
         modified_columns = []
         masked_start = time.time()
         cnt_column_masked = 0
         masked_columns = []
         original_columns = []
-                    
+
         for col_name in tbl.schema.names:
             if tbl.schema.field(col_name).metadata and tbl.schema.field(col_name).metadata.get(b"req") == b"sensitive":
                 print(f"(MASKED) Processing sensitive column '{col_name}' with metadata: {tbl.schema.field(col_name).metadata}")
@@ -190,18 +189,18 @@ def convert_shapefile_to_parquet(fn, sch, pfn,  dbname, dataset_name, private_ke
         os.makedirs(output_folder, exist_ok=True)
         output_file = os.path.join(output_folder, pfn)
         # print(output_file)
-        
+
         encrypt_start = time.time()
         encrypt_table(tbl, output_file, private_key)
         encrypt_duration = time.time() - encrypt_start
         memory_size_mb = tbl.nbytes / (1024 * 1024)
         #logging.info(output_file)
-        
-        # Step 8: Uploading encrypted data to SFTP    
+
+        # Step 8: Uploading encrypted data to SFTP
         sftp_start = time.time()
         save_to_sftp(output_file, target_user, target_ip, target_path)
         sftp_upload_duration = time.time() - sftp_start
-        
+
         # Step 9: Save success results to a file in reports directory
         report_file_dir = "/home/cdsw/PIPELINE/OUTPUT/LOG/"
         os.makedirs(report_file_dir, exist_ok=True)
@@ -212,11 +211,11 @@ def convert_shapefile_to_parquet(fn, sch, pfn,  dbname, dataset_name, private_ke
             file.write(f"\n{formatted_datetime} - Success results: {sch} Schema\n")
             file.write(f"The Shape file from :  {fn} \n")
             file.write(f"The Parquet file written into :  {output_file} \nTotal Record : {gdf.shape[0]}\n")
-        
+
         # Logging durations
         with open(log_file_path, "a") as log_file:
             log_file.write(f"{output_file}: \nread_duration: {read_duration:.2f} seconds,\nmasked_duration: {masked_duration:.2f} seconds, \nencrypt_duration: {encrypt_duration:.2f} seconds, \nupload_to_sftp_duration: {sftp_upload_duration:.2f} seconds, \ncount masked column: {cnt_column_masked}, \nmemory size (mb): {memory_size_mb}\n\n")
-            
+
     else:
         print('The schema '+str(sch)+' for file '+str(fn)+' not exists in schema_config.yaml')
 
@@ -228,23 +227,23 @@ def convert_shapefile_to_parquet(fn, sch, pfn,  dbname, dataset_name, private_ke
 #=========================================================================================
 def mercator_to_lonlat(x, y):
     '''
-    The provided mercator_to_lonlat function converts coordinates from the 
-    Web Mercator projection (EPSG:3857) to latitude and longitude in the 
-    WGS84 coordinate system (EPSG:4326). 
+    The provided mercator_to_lonlat function converts coordinates from the
+    Web Mercator projection (EPSG:3857) to latitude and longitude in the
+    WGS84 coordinate system (EPSG:4326).
     Here's a breakdown of how it works:
 
-    1)It first converts the X-coordinate (longitude) from meters to degrees 
-    using the formula (x / 20037508.34) * 180. 
-    This formula scales the X-coordinate by the circumference of the Earth 
+    1)It first converts the X-coordinate (longitude) from meters to degrees
+    using the formula (x / 20037508.34) * 180.
+    This formula scales the X-coordinate by the circumference of the Earth
     at the Equator (approximately 40,075,008.34 meters) to get a value in degrees.
 
-    2)It then converts the Y-coordinate (latitude) from meters to degrees using 
-    a series of calculations involving the natural logarithm and the arctangent 
-    function. This process is based on the inverse Mercator projection formula. 
+    2)It then converts the Y-coordinate (latitude) from meters to degrees using
+    a series of calculations involving the natural logarithm and the arctangent
+    function. This process is based on the inverse Mercator projection formula.
     The detailed explanation is as follows:
     - Divide the Y-coordinate by the Earth's radius (20037508.34) to get a value between -1 and 1.
     - Multiply by 180 to convert from radians to degrees.
-    - Calculate the latitude using the formula 2 * atan(exp(y * pi / 180)) - pi / 2, 
+    - Calculate the latitude using the formula 2 * atan(exp(y * pi / 180)) - pi / 2,
       where exp is the exponential function and atan is the arctangent function.
     - Convert the latitude from radians to degrees using the formula 180 / pi.
 
@@ -256,7 +255,7 @@ def mercator_to_lonlat(x, y):
     return lon, lat
 
 #=========================================================================================
-# convert shape file and call function mercator_to_lonlat to convert coordinates 
+# convert shape file and call function mercator_to_lonlat to convert coordinates
 #=========================================================================================
 def convert_shapefile(fn):
     gdf = gpd.read_file(fn)
@@ -270,7 +269,7 @@ def convert_shapefile(fn):
             new_polygon = Polygon(new_coords)
             # Update the geometry column with the new Polygon
             gdf.at[index, 'geometry'] = new_polygon
-    
+
     return gdf
 
 #=========================================================================================
@@ -284,7 +283,7 @@ def find_myboundary(point, polygon_gdf):
         if point_geom.within(row['geometry']):
             inout_boundry = "in_the_boundry" #row['BND_ID']
             break
-    
+
     # If the point is not inside any polygon, return out_of_boundry value
     return inout_boundry
 
@@ -299,9 +298,9 @@ def point_inside_polygon(point, polygon_gdf):
         if point_geom.within(polygon['geometry']):
             inside_polygon = True
             break
-    
+
     # If the point is not inside any polygon, return False value
     return inside_boundry
 
-  
+
 log_file_path = "/home/cdsw/PIPELINE/OUTPUT/LOG/runtime_log.txt"

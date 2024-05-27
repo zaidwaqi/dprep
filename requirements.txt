@@ -8,3 +8,5 @@ pyarrow
 geopandas
 paramiko
 Click
+rtree
+pyyaml

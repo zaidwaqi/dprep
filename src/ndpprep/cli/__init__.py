@@ -1,0 +1,1 @@
+from ndpprep.cli.main import cli
