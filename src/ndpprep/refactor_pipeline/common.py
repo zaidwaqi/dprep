@@ -1,0 +1,6 @@
+HIVE_PATH = "hdfs://nerveprdha/warehouse/tablespace/external/hive"
+SECRET_PATH = "/home/cdsw/Job Scripts/secret_key.txt"
+LOG_FILE_PATH = "/home/cdsw/Job Scripts/log/runtime_log.txt"
+PROCESSED_FILE_PATH = "/home/cdsw/Job Scripts/log/processed_files.txt"
+TOTAL_PROCESSED_FILE_PATH = "/home/cdsw/Job Scripts/log/total_processed_files.txt"
+FAIL_PROCESSED_FILE_PATH = "/home/cdsw/Job Scripts/log/processed_files-fail.txt"

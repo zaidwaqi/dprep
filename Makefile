@@ -5,4 +5,4 @@ test:
 hot-reload:
 	@pip uninstall ndpprep -y
 	@python -m build
-	@pip install dist/ndpprep-*.tar.gz
+	@pip install dist/ndpprep-0.0.8.tar.gz
