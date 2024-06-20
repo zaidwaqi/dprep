@@ -119,6 +119,8 @@ class Pipeline:
                         memory_size_mb=parquet_memory_size_mb,
                         **params,
                     )
+                else:
+                    step(**params)
 
             print(
                 f"File found for extraction date '{self.extraction_date}' in '{self.dataset_name}'"
