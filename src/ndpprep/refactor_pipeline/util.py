@@ -134,6 +134,19 @@ def list_parquet_csv_files(path):
     filtered_data = [file for file in paths if hdfs.path.isfile(file)]
     return filtered_data
 
+def list_parquet_csv_files_in_bulk(path:str, process_number:int, max_process_number:int):
+    paths = hdfs.ls(path, recursive=True)
+    filtered_data = [file for file in paths if hdfs.path.isfile(file)]
+    total_files = len(filtered_data)
+    files_per_process = (total_files + max_process_number - 1) // max_process_number  # Ceiling division
+    # Calculate the start and end indices for the current process
+    start_index = process_number * files_per_process
+    end_index = min(start_index + files_per_process, total_files)
+
+    # Get the subset of files for the current process
+    assigned_files = filtered_data[start_index:end_index]
+
+    return assigned_files
 
 def strip_and_replace(df):  # for csv
     # Strip whitespace from each element
