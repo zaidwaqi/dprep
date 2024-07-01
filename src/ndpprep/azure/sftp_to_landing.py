@@ -4,6 +4,7 @@ import paramiko
 from ndpprep.encryption.main import InMemoryKmsClient, pe
 
 from azure.storage.filedatalake import DataLakeServiceClient, DataLakeFileClient
+from azure.identity import ManageIdentityCredential
 
 def sftp_to_landing(sftp_path:str):
     # Data Configuration
@@ -12,15 +13,18 @@ def sftp_to_landing(sftp_path:str):
     EXTRACTION_DATE = os.environ["EXTRACTION_DATE"]
     # Azure Configuration
     AZURE_STORAGE_ACCOUNT = os.environ["AZURE_STORAGE_ACCOUNT"]
-    AZURE_STORAGE_ACCESS_KEY = os.environ["AZURE_STORAGE_ACCESS_KEY"]
     AZURE_FILE_SYSTEM = os.environ["AZURE_FILE_SYSTEM"]
     # SFTP Configuration
     SFTP_HOST = os.environ["SFTP_HOST"]
     SFTP_USERNAME = os.environ["SFTP_USERNAME"]
+    SFTP_PASSWORD = os.environ["SFTP_PASSWORD"]
+
+    # Create credentials
+    CREDENTIAL = ManagedIdentityCredential()
 
     service_client = DataLakeServiceClient(
         account_url=f"https://{AZURE_STORAGE_ACCOUNT}.dfs.core.windows.net",
-        credential=AZURE_STORAGE_ACCESS_KEY
+        credential=CREDENTIAL
     )
     file_system_client = service_client.get_file_system_client(file_system=AZURE_FILE_SYSTEM)
 
