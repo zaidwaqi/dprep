@@ -14,3 +14,6 @@ env/
 
 # .pypirc
 .pypirc
+
+# .env
+**/.env
