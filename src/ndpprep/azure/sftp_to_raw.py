@@ -145,7 +145,6 @@ def sftp_to_raw_with_db_name(db_name: str):
                 f"E:\\NDP\\DECRYPT\\{db_name}\\{dataset_folder}\\{extraction_date_folder}\\"
             )
             for filename in filenames:
-                first_table_printed = False
                 file_path = os.path.join(
                     f"E:\\NDP\\DECRYPT\\{db_name}\\{dataset_folder}\\{extraction_date_folder}\\",
                     filename,
@@ -155,15 +154,6 @@ def sftp_to_raw_with_db_name(db_name: str):
                         f, decryption_properties=decryption_properties
                     )
                     table = encrypted_parquet_file.read()
-                    # Print full column names with sample values
-                    if not first_table_printed:
-                        schema = table.schema
-                        first_table_printed = False
-                        for i, field in enumerate(schema):
-                            column_name = field.name
-                            column_value = table[column_name].to_pylist()[:3]
-                            print(f"{column_name}: {column_value}")
-                        first_table_printed = True
                     try:
                         # Create folder if it doesn't exist
                         output_folder = (
@@ -229,7 +219,6 @@ def sftp_to_raw_with_db_name_dataset_name(db_name: str, dataset_name: str):
             f"E:\\NDP\\DECRYPT\\{db_name}\\{dataset_name}\\{extraction_date_folder}\\"
         )
         for filename in filenames:
-            first_table_printed = False
             file_path = os.path.join(
                 f"E:\\NDP\\DECRYPT\\{db_name}\\{dataset_name}\\{extraction_date_folder}\\",
                 filename,
@@ -239,15 +228,6 @@ def sftp_to_raw_with_db_name_dataset_name(db_name: str, dataset_name: str):
                     f, decryption_properties=decryption_properties
                 )
                 table = encrypted_parquet_file.read()
-                # Print full column names with sample values
-                if not first_table_printed:
-                    schema = table.schema
-                    first_table_printed = False
-                    for i, field in enumerate(schema):
-                        column_name = field.name
-                        column_value = table[column_name].to_pylist()[:3]
-                        print(f"{column_name}: {column_value}")
-                    first_table_printed = True
                 try:
                     # Create folder if it doesn't exist
                     output_folder = f"{db_name}/{dataset_name}/{extraction_date_folder}"
@@ -316,24 +296,11 @@ def sftp_to_raw_with_db_name_extraction_date(db_name: str, extraction_date: str)
             )
             filenames = os.listdir(extraction_date_folder_path)
             for filename in filenames:
-                first_table_printed = False
                 file_path = os.path.join(extraction_date_folder_path, filename)
                 with open(file_path, "rb") as f:
                     table = pq.read_table(
                         f, decryption_properties=decryption_properties
                     )
-
-                    # Print full column names with sample values
-                    if not first_table_printed:
-                        schema = table.schema
-                        first_table_printed = False
-                        for i, field in enumerate(schema):
-                            column_name = field.name
-                            column_values = table[column_name].to_pylist()[
-                                :5
-                            ]  # The first 5 values as sample
-                            print(f"{column_name}: {column_values}")
-                        first_table_printed = True
 
                     try:
                         # Create folder if it doesn't exist
